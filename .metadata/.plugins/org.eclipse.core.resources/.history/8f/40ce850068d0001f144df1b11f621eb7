@@ -1,0 +1,32 @@
+package com.v1.online.exam.service;
+
+import com.v1.online.exam.entity.Users;
+import com.v1.online.exam.repository.UsersRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private final UsersRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UsersRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Users registerUser(String username, String password, String role) {
+        if (userRepository.findByName(username).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        Users user = new Users();
+        user.setName(username);
+        user.setPassword(passwordEncoder.encode(password)); // Hash the password
+        user.setRole(role);
+
+        return userRepository.save(user);
+    }
+}
+s

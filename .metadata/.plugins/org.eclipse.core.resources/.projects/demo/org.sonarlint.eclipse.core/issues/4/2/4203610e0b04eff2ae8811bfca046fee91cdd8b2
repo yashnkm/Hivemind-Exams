@@ -1,0 +1,6 @@
+
+l	java:S125"<This block of commented-out lines of code should be removed.(ÌƒˆÕøÿÿÿÿHÂRMAJORZ
+CODE_SMELL
+”
+java:S1157"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(âÉŞ¬øÿÿÿÿHÅRMINORZ
+CODE_SMELL

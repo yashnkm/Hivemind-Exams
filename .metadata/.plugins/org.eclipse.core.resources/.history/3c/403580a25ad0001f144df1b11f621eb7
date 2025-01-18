@@ -1,0 +1,35 @@
+package com.example.secureexamplatform.service;
+
+import com.example.secureexamplatform.dto.UserRegistrationDto;
+import com.example.secureexamplatform.entity.User;
+import com.example.secureexamplatform.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    public User registerUser(UserRegistrationDto userDto) {
+        // Check if email already exists
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email is already in use");
+        }
+
+        // Map DTO to Entity
+        User user = new User();
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(User.Role.valueOf(userDto.getRole().toUpperCase()));
+
+        // Save to database
+        return userRepository.save(user);
+    }
+}

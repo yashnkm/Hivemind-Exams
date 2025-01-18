@@ -1,0 +1,37 @@
+package com.v1.online.exam.service;
+
+import com.v1.online.exam.entity.Users;
+import com.v1.online.exam.repository.UsersRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final UsersRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomUserDetailsService(UsersRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Fetch user from the database
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        // Return a UserDetails object
+        return new org.springframework.security.core.userdetails.User(
+                user.getName(),
+                user.getPassword(),
+                Collections.emptyList() // Replace with roles/authorities if needed
+        );
+    }
+}

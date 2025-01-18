@@ -1,0 +1,5 @@
+package com.v1.online.exam.repository;
+
+public interface UsersRepository {
+
+}

@@ -1,0 +1,24 @@
+package com.v1.online.exam.controller;
+
+import com.example.secureexamplatform.dto.UserRegistrationDto;
+import com.example.secureexamplatform.entity.User;
+import com.example.secureexamplatform.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationDto userDto) {
+        User user = userService.registerUser(userDto);
+        return ResponseEntity.ok(user);
+    }
+}

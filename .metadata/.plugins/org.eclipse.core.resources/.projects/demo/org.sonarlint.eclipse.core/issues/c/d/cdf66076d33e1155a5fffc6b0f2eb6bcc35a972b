@@ -1,0 +1,14 @@
+
+Z
+java:S18741".Remove this use of "parser"; it is deprecated.(¹Ñº¹HèRMINORZ
+CODE_SMELL
+g
+java:S64372"6Revoke and change this password, as it is compromised.(ÑƒÅÙHéRBLOCKERZVULNERABILITY
+a
+java:S18742"5Remove this use of "setSigningKey"; it is deprecated.(ÑƒÅÙHíRMINORZ
+CODE_SMELL
+l
+java:S6437"6Revoke and change this password, as it is compromised.(¦šìöýÿÿÿÿHëRBLOCKERZVULNERABILITY
+a
+java:S1874"0Remove this use of "signWith"; it is deprecated.(¦šìöýÿÿÿÿHçRMINORZ
+CODE_SMELL

@@ -1,0 +1,53 @@
+package com.v1.online.exam.controller;
+
+
+import com.v1.online.exam.repository.UsersRepository;
+import com.v1.online.exam.config.JwtUtil;
+import com.v1.online.exam.dto.LoginRequestDto;
+import com.v1.online.exam.dto.RegisterRequestDto;
+import com.v1.online.exam.entity.Users;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UsersRepository userRepository;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsersRepository userRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequestDto loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+        );
+        return jwtUtil.generateToken(authentication.getName());
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequestDto registerRequest) {
+        if (userRepository.findByName(registerRequest.getName()).isPresent()) {
+            throw new RuntimeException("Name already exists");
+        }
+
+        Users user = new Users();
+        user.setName(registerRequest.getName());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(registerRequest.getPassword()));
+        user.setRole(Users.Role.valueOf(registerRequest.getRole().toUpperCase()));
+        userRepository.save(user);
+
+        return "User registered successfully!";
+    }
+}

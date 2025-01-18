@@ -1,0 +1,23 @@
+package com.v1.online.exam.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public class UserRegistrationDto {
+
+    @NotBlank
+    private String name;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @Size(min = 6)
+    @NotBlank
+    private String password;
+
+    private String role;
+
+    // Getters and Setters
+}
